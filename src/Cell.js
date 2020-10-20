@@ -20,7 +20,12 @@ class Cell extends Component {
   render() {
     //this.setState({displayed: this.props.word})
     return (
-        <td className='Cell Cell-lit' onClick={this.handleClick}>{this.state.displayed} </td>
+        <td 
+          className='Cell Cell-lit' 
+          onClick={this.handleClick}
+        >
+          {this.state.displayed}
+        </td>
     )
   }
 }
