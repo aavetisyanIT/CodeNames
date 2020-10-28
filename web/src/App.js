@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Messenger from './Messenger';
 import Board from './Board';
 import './App.css';
 
-function App() {
-	return (
-		<div className='App'>
-			<Board />
-			<Messenger />
-		</div>
-	);
+export default class App extends Component {
+	render() {
+		return (
+			<div className='App'>
+				<Board />
+				<Messenger />
+			</div>
+		);
+	}
 }
-
-export default App;

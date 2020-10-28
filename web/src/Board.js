@@ -25,7 +25,6 @@ class Board extends Component {
 		};
 		this.createBoard = this.createBoard.bind(this);
 		this.rollAssign = this.rollAssign.bind(this);
-		this.showRoll = this.showRoll.bind(this);
 	}
 
 	//create initial board with ramdon words
@@ -50,7 +49,6 @@ class Board extends Component {
 		shuffle(rollBoard[4]);
 		return rollBoard;
 	}
-	showRoll() {}
 
 	render() {
 		let tblBoard = [];
