@@ -3,6 +3,9 @@ import { randomWord } from './words';
 import { shuffle } from './randomRoll';
 import Cell from './Cell';
 import './Board.css';
+import io from 'socket.io-client';
+
+const socket = io.connect('http://localhost:4000');
 
 class Board extends Component {
 	static defaultProps = {
@@ -25,6 +28,18 @@ class Board extends Component {
 		};
 		this.createBoard = this.createBoard.bind(this);
 		this.rollAssign = this.rollAssign.bind(this);
+		this.handleClick = this.handleClick.bind(this);
+	}
+
+	componentDidMount() {
+		//sending out original baord
+		const { board } = this.state;
+		socket.emit('state', { board });
+
+		//updating current board with new baord with just opened roll
+		socket.on('state', ({ data }) => {
+			this.setState({ board: data.board });
+		});
 	}
 
 	//create initial board with ramdon words
@@ -50,6 +65,21 @@ class Board extends Component {
 		return rollBoard;
 	}
 
+	//retriving data on clicked Cell component
+	//updating Board state to show Cell roll on the board
+	handleClick(clickedCell) {
+		let y = clickedCell.curCoord.y;
+		let x = clickedCell.curCoord.x;
+		let flippedRoll = clickedCell.curRoll;
+		let updatedBoard = this.state.board;
+		updatedBoard[y][x] = flippedRoll;
+		this.setState({ board: updatedBoard });
+
+		//sending out updated board with opened roll
+		const { board } = this.state;
+		socket.emit('state', { board });
+	}
+
 	render() {
 		let tblBoard = [];
 		//assigning key values and words to Cell component
@@ -60,8 +90,10 @@ class Board extends Component {
 				row.push(
 					<Cell
 						key={coord}
-						word={this.state.board[y][x]}
+						coord={{ y, x }}
 						roll={this.state.rollAssign[y][x]}
+						displayed={this.state.board[y][x]}
+						onClick={this.handleClick}
 					/>,
 				);
 			}
