@@ -39,6 +39,7 @@ class Board extends Component {
 		//updating current board with new baord with just opened roll
 		socket.on('state', ({ data }) => {
 			this.setState({ board: data.board });
+			console.log(data);
 		});
 	}
 

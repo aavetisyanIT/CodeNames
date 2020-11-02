@@ -7,6 +7,7 @@ io.on('connection', (socket) => {
 		io.emit('message', { name, message });
 	});
 	socket.on('state', (data) => {
+		console.log(socket.id);
 		io.emit('state', { data });
 	});
 });
