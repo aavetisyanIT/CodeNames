@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { randomWord } from './words';
-import { shuffle } from './randomRoll';
+import { shuffle } from './randomRole';
 import Cell from './Cell';
 import './Board.css';
 import io from 'socket.io-client';
@@ -11,7 +11,7 @@ class Board extends Component {
 	static defaultProps = {
 		nrows: 5,
 		ncols: 5,
-		rollBoard: [
+		roleBoard: [
 			['teamA', 'teamB', 'teamA', 'teamB', 'civilian'],
 			['teamA', 'teamB', 'civilian', 'teamB', 'civilian'],
 			['teamA', 'civilian', 'teamA', 'teamB', 'assassin'],
@@ -24,10 +24,10 @@ class Board extends Component {
 		super(props);
 		this.state = {
 			board: this.createBoard(),
-			rollAssign: this.rollAssign(),
+			roleAssign: this.roleAssign(),
 		};
 		this.createBoard = this.createBoard.bind(this);
-		this.rollAssign = this.rollAssign.bind(this);
+		this.roleAssign = this.roleAssign.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 	}
 
@@ -36,7 +36,7 @@ class Board extends Component {
 		const { board } = this.state;
 		socket.emit('state', { board });
 
-		//updating current board with new baord with just opened roll
+		//updating current board with new baord with just opened role
 		socket.on('state', ({ data }) => {
 			this.setState({ board: data.board });
 			console.log(data);
@@ -55,28 +55,28 @@ class Board extends Component {
 		}
 		return board;
 	}
-	//shuffling rolls in rollBoard
-	rollAssign() {
-		let rollBoard = shuffle(this.props.rollBoard);
-		shuffle(rollBoard[0]);
-		shuffle(rollBoard[1]);
-		shuffle(rollBoard[2]);
-		shuffle(rollBoard[3]);
-		shuffle(rollBoard[4]);
-		return rollBoard;
+	//shuffling roles in roleBoard
+	roleAssign() {
+		let roleBoard = shuffle(this.props.roleBoard);
+		shuffle(roleBoard[0]);
+		shuffle(roleBoard[1]);
+		shuffle(roleBoard[2]);
+		shuffle(roleBoard[3]);
+		shuffle(roleBoard[4]);
+		return roleBoard;
 	}
 
 	//retriving data on clicked Cell component
-	//updating Board state to show Cell roll on the board
+	//updating Board state to show Cell role on the board
 	handleClick(clickedCell) {
 		let y = clickedCell.curCoord.y;
 		let x = clickedCell.curCoord.x;
-		let flippedRoll = clickedCell.curRoll;
+		let flippedRole = clickedCell.curRole;
 		let updatedBoard = this.state.board;
-		updatedBoard[y][x] = flippedRoll;
+		updatedBoard[y][x] = flippedRole;
 		this.setState({ board: updatedBoard });
 
-		//sending out updated board with opened roll
+		//sending out updated board with opened role
 		const { board } = this.state;
 		socket.emit('state', { board });
 	}
@@ -92,7 +92,7 @@ class Board extends Component {
 					<Cell
 						key={coord}
 						coord={{ y, x }}
-						roll={this.state.rollAssign[y][x]}
+						role={this.state.roleAssign[y][x]}
 						displayed={this.state.board[y][x]}
 						onClick={this.handleClick}
 					/>,
