@@ -1,7 +1,7 @@
 const { Team } = require('./team.js');
-let team = new Team();
+let teamA = new Team('teamA');
+let teamB = new Team('teamB');
 const { Player } = require('./player.js');
-let player = new Player();
 
 const app = require('express')();
 const http = require('http').createServer(app);
@@ -14,17 +14,12 @@ io.on('connection', (socket) => {
 	socket.on('state', (data) => {
 		io.emit('state', { data });
 	});
-	socket.on('LogIn', (LogInDate) => {
-		let newPlayer = new Player(socket.id, LogInDate.name, LogInDate.team);
-		let teamA = new Team('teamA');
-		let teamB = new Team('teamB');
-
+	socket.on('LogIn', (LogInData) => {
+		let newPlayer = new Player(socket.id, LogInData.name, LogInData.team);
 		if (newPlayer.teamId === 'teamA') {
 			teamA.addPlayer(newPlayer);
-			console.log(teamA);
 		} else {
 			teamB.addPlayer(newPlayer);
-			console.log(teamB);
 		}
 	});
 });
