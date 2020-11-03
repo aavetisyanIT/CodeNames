@@ -1,3 +1,25 @@
-class Team {}
+const { Player } = require('./player.js');
+let player = new Player();
 
-export default Team;
+class Team {
+	players = [];
+
+	constructor(id, name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	addPlayer(player) {
+		console.log(this.players);
+		if (this.players.includes(player)) {
+			return;
+		}
+		this.players.push(player);
+	}
+
+	removePlayer(player) {
+		console.log('player removed' + player);
+	}
+}
+
+exports.Team = Team;
