@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 
 const socket = io.connect('http://localhost:4000');
@@ -51,7 +52,9 @@ export default class LogIn extends Component {
 							/>
 						</label>
 					</p>
-					<input type='submit' value='Submit' />
+					<Link to='/game'>
+						<input type='submit' value='Submit' />
+					</Link>
 				</form>
 			</div>
 		);
