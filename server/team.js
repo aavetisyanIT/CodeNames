@@ -10,7 +10,6 @@ class Team {
 	}
 
 	addPlayer(player) {
-		console.log(this.players);
 		if (this.players.includes(player)) {
 			return;
 		}

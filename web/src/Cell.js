@@ -6,7 +6,7 @@ class Cell extends Component {
 		super(props);
 		this.state = {
 			curWord: this.props.displayed,
-			curRoll: this.props.roll,
+			curRole: this.props.role,
 			curCoord: this.props.coord,
 		};
 	}

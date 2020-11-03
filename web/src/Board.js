@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+// Messenger component
+// import Messanger from './Messanger';
 import { randomWord } from './words';
 import { shuffle } from './randomRole';
 import Cell from './Cell';
@@ -111,6 +113,8 @@ class Board extends Component {
 				</table>
 				<p>Clue Word:</p>
 				<p>Clue Number:</p>
+				{/* Messenger */}
+				{/* <Messanger /> */}
 			</div>
 		);
 	}

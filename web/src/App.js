@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import LogIn from './LogIn';
-// import Messenger from './Messenger';
-// import Board from './Board';
+import Board from './Board';
 import './App.css';
 
 export default class App extends Component {
 	render() {
 		return (
 			<div className='App'>
-				<LogIn />
-				{/* <Board />
-				<Messenger /> */}
+				<Switch>
+					<Route exact path='/' component={LogIn} />
+					<Route exact path='/game' component={Board} />
+				</Switch>
 			</div>
 		);
 	}

@@ -5,7 +5,7 @@ import './App.css';
 
 const socket = io.connect('http://localhost:4000');
 
-export default class Messenger extends Component {
+export default class Messanger extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
