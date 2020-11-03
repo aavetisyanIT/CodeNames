@@ -27,6 +27,7 @@ class Board extends Component {
 		this.state = {
 			board: this.createBoard(),
 			roleAssign: this.roleAssign(),
+			teamId: 'teamID',
 		};
 		this.createBoard = this.createBoard.bind(this);
 		this.roleAssign = this.roleAssign.bind(this);
@@ -39,8 +40,12 @@ class Board extends Component {
 		socket.emit('state', { board });
 
 		//updating current board with new baord with just opened role
-		socket.on('state', ({ data }) => {
-			this.setState({ board: data.board });
+		socket.on('state', ({ serverBoard }) => {
+			this.setState({ board: serverBoard.board });
+		});
+
+		//test socket
+		socket.on('test', (data) => {
 			console.log(data);
 		});
 	}
@@ -81,6 +86,8 @@ class Board extends Component {
 		//sending out updated board with opened role
 		const { board } = this.state;
 		socket.emit('state', { board });
+		const click = 'Clicked on a cell';
+		socket.emit('click', click);
 	}
 
 	render() {
@@ -104,6 +111,7 @@ class Board extends Component {
 		}
 		return (
 			<div>
+				<h1>Team: {this.state.teamId} </h1>
 				<div className='Board-title'>
 					<div className='neon-orange'>Code</div>
 					<div className='neon-blue'>Names</div>

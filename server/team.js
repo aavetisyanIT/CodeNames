@@ -1,23 +1,19 @@
-const { Player } = require('./player.js');
-let player = new Player();
-
 class Team {
 	players = [];
 
-	constructor(id, name) {
-		this.id = id;
-		this.name = name;
+	constructor(teamId) {
+		this.teamId = teamId;
 	}
 
-	addPlayer(player) {
-		if (this.players.includes(player)) {
-			return;
-		}
-		this.players.push(player);
+	addPlayer(newPlayer) {
+		const { players } = this;
+		const { id } = newPlayer;
+		players.push(newPlayer);
+		//I wasn't able to verify if player already exists
 	}
 
 	removePlayer(player) {
-		console.log('player removed' + player);
+		console.log('player needs to be removed:  ' + player);
 	}
 }
 

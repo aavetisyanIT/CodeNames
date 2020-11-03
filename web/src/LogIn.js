@@ -23,13 +23,16 @@ export default class LogIn extends Component {
 		event.preventDefault();
 		const { name, team } = this.state;
 		socket.emit('LogIn', { name, team });
+
+		let data = 'Hello from LogIn page';
+		socket.emit('test', data);
 	}
 
 	render() {
 		return (
 			<div>
 				<form onSubmit={this.handleSubmit}>
-					<h4>Join New Game</h4>
+					<h4>Join YOUR TEAM</h4>
 					<label>
 						Name:
 						<input
@@ -52,9 +55,10 @@ export default class LogIn extends Component {
 							/>
 						</label>
 					</p>
-					<Link to='/game'>
-						<input type='submit' value='Submit' />
-					</Link>
+					<input type='submit' value='Submit' />
+					<p>
+						<Link to='/game'>Go to New Game</Link>
+					</p>
 				</form>
 			</div>
 		);
