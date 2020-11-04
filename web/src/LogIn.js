@@ -10,6 +10,8 @@ export default class LogIn extends Component {
 		this.state = {
 			name: '',
 			team: '',
+			addToGame: false,
+			gameId: null,
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,14 +23,26 @@ export default class LogIn extends Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
+		//sending name and team picked by player to set player and teams
 		const { name, team } = this.state;
-		socket.emit('LogIn', { name, team });
-
-		let data = 'Hello from LogIn page';
-		socket.emit('test', data);
+		socket.emit('makeGame', { name, team });
+		//setting gameId and switching buttons to start game
+		socket.on('gameCreated', (data) => {
+			this.setState({ gameId: data, addToGame: true });
+		});
 	}
 
 	render() {
+		let addToGame;
+		if (!this.state.addToGame) {
+			addToGame = <input type='submit' value='REQUEST TO JOIN A GAME' />;
+		} else {
+			addToGame = (
+				<p>
+					<Link to='/game'>GO TO THE GAME</Link>
+				</p>
+			);
+		}
 		return (
 			<div>
 				<form onSubmit={this.handleSubmit}>
@@ -55,10 +69,7 @@ export default class LogIn extends Component {
 							/>
 						</label>
 					</p>
-					<input type='submit' value='Submit' />
-					<p>
-						<Link to='/game'>Go to New Game</Link>
-					</p>
+					{addToGame}
 				</form>
 			</div>
 		);

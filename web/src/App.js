@@ -10,7 +10,7 @@ export default class App extends Component {
 			<div className='App'>
 				<Switch>
 					<Route exact path='/' render={() => <LogIn />} />
-					<Route exact path='/game' render={() => <Board />} />
+					<Route exact path='/game' component={Board} />
 				</Switch>
 			</div>
 		);
