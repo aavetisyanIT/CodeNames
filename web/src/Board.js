@@ -75,10 +75,10 @@ class Board extends Component {
 	}
 
 	render() {
-		socket.on('setBoard', (data) => {
-			console.log(data);
-			this.setState({ board: data });
-		});
+		// socket.on('setBoard', (data) => {
+		// 	console.log(data);
+		// 	this.setState({ board: data });
+		// });
 		let tblBoard = [];
 		//assigning key values and words to Cell component
 		for (let y = 0; y < this.props.nrows; y++) {
@@ -99,7 +99,7 @@ class Board extends Component {
 		}
 		return (
 			<div>
-				<h1>Team: {this.state.teamId} </h1>
+				<h1>Team: {this.props.logInData.teamId} </h1>
 				<div className='Board-title'>
 					<div className='neon-orange'>Code</div>
 					<div className='neon-blue'>Names</div>

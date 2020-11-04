@@ -54,7 +54,6 @@ io.on('connection', (socket) => {
 			new Game(gameId);
 			// createing game board of random words
 			game.makeGame(gameId);
-			console.log(game);
 			io.emit('gameCreated', gameId);
 			initialBoard = game.board;
 			let data = initialBoard;

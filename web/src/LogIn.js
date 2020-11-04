@@ -11,6 +11,7 @@ export default class LogIn extends Component {
 			name: '',
 			team: '',
 			addToGame: false,
+			playerId: null,
 			gameId: null,
 		};
 		this.handleChange = this.handleChange.bind(this);
@@ -28,7 +29,23 @@ export default class LogIn extends Component {
 		socket.emit('makeGame', { name, team });
 		//setting gameId and switching buttons to start game
 		socket.on('gameCreated', (data) => {
-			this.setState({ gameId: data, addToGame: true });
+			let playerId = socket.id;
+			this.setState(
+				{ playerId: playerId, gameId: data, addToGame: true },
+				() => {
+					//sending plaayer data to App component
+					if (this.props.onChange) {
+						let { name, playerId, team, gameId } = this.state;
+						let logInData = {
+							name: name,
+							playerId: playerId,
+							teamId: team,
+							gameId: gameId,
+						};
+						this.props.onChange(logInData);
+					}
+				},
+			);
 		});
 	}
 
