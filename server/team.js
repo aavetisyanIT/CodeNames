@@ -1,15 +1,16 @@
 class Team {
 	players = [];
+	playersNum = 0;
 
-	constructor(teamId) {
+	constructor(teamId, gameId) {
 		this.teamId = teamId;
+		this.gameId = gameId;
 	}
 
 	addPlayer(newPlayer) {
-		const { players } = this;
-		const { id } = newPlayer;
-		players.push(newPlayer);
+		this.players.push(newPlayer);
 		//I wasn't able to verify if player already exists
+		this.playersNum++;
 	}
 
 	removePlayer(player) {
