@@ -17,21 +17,23 @@ server.listen(port, function () {
 });
 
 io.on('connection', (socket) => {
-	//when the client  requests to make a Game
-	socket.on('makeGame', (data) => {
+	//initial game request
+	socket.on('initialGameRequest', (data) => {
 		//Creating a new Player
 		let newPlayer = new Player(socket.id, data.name, data.team);
 
 		game.addPlayer(newPlayer, socket);
 		game.addPlayerToTeam(newPlayer.id, data.team);
 
-		let teamAPlayersCount = game.teamA.players.length;
-		let teamBPlayersCount = game.teamB.players.length;
+		//sending initial board to all players
+		io.emit('setBoard', game.board);
+		//console.log(game.board);
 
-		//ADDING TEAMS TO A GAME
-		if (teamAPlayersCount >= 1 && teamBPlayersCount >= 1) {
-			console.log(game);
-			io.emit('setBoard', game.board);
-		}
+		//allowing player to join the game when team has certain number of players
+		// let teamAPlayersCount = game.teamA.players.length;
+		// let teamBPlayersCount = game.teamB.players.length;
+
+		// if (teamAPlayersCount >= 1 && teamBPlayersCount >= 1) {
+		// }
 	});
 });

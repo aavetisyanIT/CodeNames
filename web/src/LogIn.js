@@ -8,8 +8,9 @@ export default class LogIn extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			board: [],
 			name: '',
-			team: '',
+			teamId: '',
 			addToGame: false,
 			playerId: null,
 		};
@@ -17,6 +18,7 @@ export default class LogIn extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
+	//setting state with input values
 	handleChange(event) {
 		this.setState({ [event.target.name]: event.target.value });
 	}
@@ -25,23 +27,19 @@ export default class LogIn extends Component {
 		event.preventDefault();
 		//sending name and team picked by player to set player and teams
 		const { name, team } = this.state;
-		socket.emit('makeGame', { name, team });
+		socket.emit('initialGameRequest', { name, team });
 
 		//setting gameId and switching buttons to start game
-		socket.on('setBoard', (newGame) => {
-			console.log(newGame);
-			this.setState({ playerId: socket.id, addToGame: true }, () => {
-				//sending plaayer data to App component
-				if (this.props.onChange) {
-					let { name, team } = this.state;
-					let game = {
-						name: name,
-						board: newGame,
-						teamId: team,
-					};
-					this.props.onChange(game);
-				}
-			});
+		socket.on('setBoard', (initialBoard) => {
+			this.setState(
+				{ board: initialBoard, playerId: socket.id, addToGame: true },
+				() => {
+					//sending initian board and new plaayer data to App component
+					if (this.props.onChange) {
+						this.props.onChange(this.state);
+					}
+				},
+			);
 		});
 	}
 
@@ -75,7 +73,7 @@ export default class LogIn extends Component {
 							Team:
 							<input
 								type='text'
-								name='team'
+								name='teamId'
 								value={this.state.team}
 								placeholder='teamA or teamB'
 								onChange={this.handleChange}

@@ -9,8 +9,6 @@ const socket = io.connect('http://localhost:4000');
 
 class Board extends Component {
 	static defaultProps = {
-		nrows: 5,
-		ncols: 5,
 		pendingBoard: [
 			[
 				'waiting for players',
@@ -49,47 +47,33 @@ class Board extends Component {
 			],
 		],
 	};
-
 	constructor(props) {
 		super(props);
 		this.state = {
+			board: props.initialData.board,
 			gameState: null,
-			board: props.pendingBoard,
-			roleAssign: props.pendingBoard,
-			teamId: null,
-			gameId: null,
+			playerId: props.initialData.playerId,
+			teamId: props.initialData.teamId,
 		};
 		this.handleClick = this.handleClick.bind(this);
 	}
-	componentDidMount() {
-		this.setState({ board: this.props.logInData.board });
-		console.log(this.props.logInData.board);
-	}
 
-	//retriving data on clicked Cell component
-	//updating Board state to show Cell role on the board
-	handleClick(clickedCell) {
-		let y = clickedCell.curCoord.y;
-		let x = clickedCell.curCoord.x;
-		let flippedRole = clickedCell.curRole;
-		let updatedBoard = this.state.board;
-		updatedBoard[y][x] = flippedRole;
-		//this.setState({ board: updatedBoard });
+	handleClick(cellCoord) {
+		console.log(cellCoord);
 	}
 
 	render() {
 		let tblBoard = [];
 		//assigning key values and words to Cell component
-		for (let y = 0; y < this.props.nrows; y++) {
+		for (let y = 0; y < 5; y++) {
 			let row = [];
-			for (let x = 0; x < this.props.ncols; x++) {
+			for (let x = 0; x < 5; x++) {
 				let coord = `${y}-${x}`;
 				row.push(
 					<Cell
 						key={coord}
 						coord={{ y, x }}
-						role={this.state.roleAssign[y][x]}
-						displayed={this.state.board[y][x]}
+						word={this.state.board[y][x]}
 						onClick={this.handleClick}
 					/>,
 				);
@@ -98,7 +82,7 @@ class Board extends Component {
 		}
 		return (
 			<div>
-				<h1>Team: {this.props.logInData.teamId} </h1>
+				<h1>Team: {this.props.initialData.teamId} </h1>
 				<div className='Board-title'>
 					<div className='neon-orange'>Code</div>
 					<div className='neon-blue'>Names</div>
