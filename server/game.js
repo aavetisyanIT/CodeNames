@@ -3,22 +3,40 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const randomWord = require('./random_word.js');
 const shuffle = require('./shuffle.js');
+const { Team } = require('./team.js');
 
 class Game {
-	teamA = [];
-	teamB = [];
 	board = [];
 	roleBoard = [];
 
-	constructor(gameId, score) {
-		(this.gameId = gameId), (this.score = score);
+	constructor() {
+		//setting gameId
+		this.gameId = (Math.random() + 1).toString(36).slice(2, 18);
+		//generating random roll board
+		this.createRoleBoard();
+		//generate board of ramdom words
+		this.createBoard();
+
+		this.teamA = new Team('teamA');
+		this.teamB = new Team('teamB');
+		this.players = new Map();
+		this.sockets = new Map();
 	}
 	//adding new team to a game
-	addTeam(newTeam) {
-		if (newTeam.teamId === 'teamA') {
-			this.teamA.push(newTeam.players);
-		} else if (newTeam.teaId === 'teamB') {
-			this.teamB.push(newTeam.players);
+	addPlayer(newPlayer, socket) {
+		this.players[newPlayer.id] = newPlayer;
+		this.sockets[newPlayer.id] = socket;
+	}
+
+	addPlayerToTeam(playerId, teamId) {
+		let player = this.players[playerId];
+
+		if (player !== null) {
+			if (this.teamA.id === teamId) {
+				this.teamA.addPlayer(player);
+			} else if (this.teamB.id === teamId) {
+				this.teamB.addPlayer(player);
+			}
 		}
 	}
 
@@ -31,10 +49,10 @@ class Game {
 			}
 			board.push(row);
 		}
-		return board;
+		this.board = board;
 	}
 
-	roleAssign() {
+	createRoleBoard() {
 		let sampleRoleBoard = [
 			['teamA', 'teamB', 'teamA', 'teamB', 'civilian'],
 			['teamA', 'teamB', 'civilian', 'teamB', 'civilian'],
@@ -49,18 +67,6 @@ class Game {
 		shuffle(newRoleBoard[3]);
 		shuffle(newRoleBoard[4]);
 		this.roleBoard = newRoleBoard;
-	}
-
-	makeGame(gameId) {
-		//setting gameId
-		this.gameId = gameId;
-		//generating random roll board
-		this.roleAssign();
-		//generate board of ramdom words
-		let board = this.createBoard();
-		this.board = board;
-
-		return this.board;
 	}
 }
 

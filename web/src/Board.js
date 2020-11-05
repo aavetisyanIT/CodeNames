@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// Messenger component
+// Messenger component is currently disabled
 // import Messanger from './Messanger';
 import Cell from './Cell';
 import './Board.css';
@@ -53,15 +53,14 @@ class Board extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			board: this.props.pendingBoard,
-			roleAssign: this.props.pendingBoard,
+			gameState: null,
+			board: props.pendingBoard,
+			roleAssign: props.pendingBoard,
 			teamId: null,
 			gameId: null,
 		};
 		this.handleClick = this.handleClick.bind(this);
 	}
-
-	componentDidMount() {}
 
 	//retriving data on clicked Cell component
 	//updating Board state to show Cell role on the board
