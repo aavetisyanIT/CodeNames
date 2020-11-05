@@ -8,11 +8,11 @@ export default class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			logInData: [],
+			game: [],
 		};
 	}
 	render() {
-		const handleData = (data) => this.setState({ logInData: data });
+		const handleData = (game) => this.setState({ game: game });
 		return (
 			<div className='App'>
 				<Switch>
@@ -24,7 +24,7 @@ export default class App extends Component {
 					<Route
 						exact
 						path='/game'
-						render={() => <Board logInData={this.state.logInData} />}
+						render={() => <Board logInData={this.state.game} />}
 					/>
 				</Switch>
 			</div>

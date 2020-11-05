@@ -26,20 +26,20 @@ export default class LogIn extends Component {
 		//sending name and team picked by player to set player and teams
 		const { name, team } = this.state;
 		socket.emit('makeGame', { name, team });
+
 		//setting gameId and switching buttons to start game
-		socket.on('setBoard', (data) => {
-			console.log(data);
+		socket.on('setBoard', (newGame) => {
+			console.log(newGame);
 			this.setState({ playerId: socket.id, addToGame: true }, () => {
 				//sending plaayer data to App component
 				if (this.props.onChange) {
-					let { name, playerId, team, gameId } = this.state;
-					let logInData = {
+					let { name, team } = this.state;
+					let game = {
 						name: name,
-						playerId: playerId,
+						board: newGame,
 						teamId: team,
-						gameId: gameId,
 					};
-					this.props.onChange(logInData);
+					this.props.onChange(game);
 				}
 			});
 		});

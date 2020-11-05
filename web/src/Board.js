@@ -61,6 +61,10 @@ class Board extends Component {
 		};
 		this.handleClick = this.handleClick.bind(this);
 	}
+	componentDidMount() {
+		this.setState({ board: this.props.logInData.board });
+		console.log(this.props.logInData.board);
+	}
 
 	//retriving data on clicked Cell component
 	//updating Board state to show Cell role on the board
@@ -74,10 +78,6 @@ class Board extends Component {
 	}
 
 	render() {
-		// socket.on('setBoard', (data) => {
-		// 	console.log(data);
-		// 	this.setState({ board: data });
-		// });
 		let tblBoard = [];
 		//assigning key values and words to Cell component
 		for (let y = 0; y < this.props.nrows; y++) {
