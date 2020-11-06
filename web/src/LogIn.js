@@ -26,8 +26,8 @@ export default class LogIn extends Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		//sending name and team picked by player to set player and teams
-		const { name, team } = this.state;
-		socket.emit('initialGameRequest', { name, team });
+		const { name, teamId } = this.state;
+		socket.emit('initialGameRequest', { name, teamId });
 
 		//setting gameId and switching buttons to start game
 		socket.on('setBoard', (initialBoard) => {

@@ -25,10 +25,10 @@ io.on('connection', (socket) => {
 	//initial game request
 	socket.on('initialGameRequest', (data) => {
 		//Creating a new Player
-		let newPlayer = new Player(socket.id, data.name, data.team);
+		let newPlayer = new Player(socket.id, data.name, data.teamId);
 
 		game.addPlayer(newPlayer, socket);
-		game.addPlayerToTeam(newPlayer.id, data.team);
+		game.addPlayerToTeam(newPlayer.id, data.teamId);
 
 		//sending initial board to all players
 		io.emit('setBoard', game.board);

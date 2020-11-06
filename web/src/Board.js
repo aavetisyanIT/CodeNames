@@ -8,46 +8,6 @@ import io from 'socket.io-client';
 const socket = io.connect('http://localhost:4000');
 
 class Board extends Component {
-	static defaultProps = {
-		pendingBoard: [
-			[
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-			],
-			[
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-			],
-			[
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-			],
-			[
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-			],
-			[
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-				'waiting for players',
-			],
-		],
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -55,6 +15,7 @@ class Board extends Component {
 			gameState: null,
 			playerId: props.initialData.playerId,
 			teamId: props.initialData.teamId,
+			spymaster: props.initialData.spymaster,
 		};
 		this.handleClick = this.handleClick.bind(this);
 	}

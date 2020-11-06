@@ -1,5 +1,3 @@
-const app = require('express')();
-const http = require('http').createServer(app);
 const randomWord = require('./random_word.js');
 const shuffle = require('./shuffle.js');
 const { Team } = require('./team.js');
@@ -7,6 +5,7 @@ const { Team } = require('./team.js');
 class Game {
 	board = [];
 	roleBoard = [];
+	spymaster = { name: '', id: '' };
 
 	constructor() {
 		//setting gameId
@@ -15,6 +14,8 @@ class Game {
 		this.createRoleBoard();
 		//generate board of ramdom words
 		this.createBoard();
+		//choose spymaster
+		this.pickSpymaster();
 
 		this.teamA = new Team('teamA');
 		this.teamB = new Team('teamB');
@@ -37,6 +38,17 @@ class Game {
 				this.teamB.addPlayer(player);
 			}
 		}
+	}
+
+	// notifyTeamA() {
+	// 	this.teamA.players.forEach(player =>
+	// 		let socket = this.sockets[player.id];
+	// 		socket.emit(‘message’, ‘message text’);
+	// 	);
+	// }
+
+	pickSpymaster() {
+		// console.log(this.players);
 	}
 
 	createBoard() {

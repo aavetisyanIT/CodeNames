@@ -12,6 +12,7 @@ export default class App extends Component {
 			name: '',
 			playerId: '',
 			teamId: '',
+			spymaster: '',
 		};
 	}
 	render() {
@@ -21,8 +22,10 @@ export default class App extends Component {
 				name: game.name,
 				playerId: game.playerId,
 				teamId: game.teamId,
+				spymaster: false,
 			});
 		};
+
 		return (
 			<div className='App'>
 				<Switch>
