@@ -5,7 +5,6 @@ class Cell extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			curWord: this.props.word,
 			curCoord: this.props.coord,
 		};
 	}
@@ -16,7 +15,7 @@ class Cell extends Component {
 				className='Cell Cell-lit'
 				onClick={() => this.props.onClick(this.state.curCoord)}
 			>
-				{this.state.curWord}
+				{this.props.word}
 			</td>
 		);
 	}

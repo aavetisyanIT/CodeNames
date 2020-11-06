@@ -1,6 +1,5 @@
 const app = require('express')();
 const http = require('http').createServer(app);
-const io = require('socket.io')(http);
 const randomWord = require('./random_word.js');
 const shuffle = require('./shuffle.js');
 const { Team } = require('./team.js');
@@ -22,7 +21,7 @@ class Game {
 		this.players = new Map();
 		this.sockets = new Map();
 	}
-	//adding new team to a game
+
 	addPlayer(newPlayer, socket) {
 		this.players[newPlayer.id] = newPlayer;
 		this.sockets[newPlayer.id] = socket;

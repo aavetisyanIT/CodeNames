@@ -6,15 +6,20 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 4000;
 const { Game } = require('./game.js');
+const { gameManager } = require('./game_manager');
 const { Player } = require('./player.js');
 
 let game = new Game();
 
 server.listen(port, function () {
 	console.log('Server listening at port %d', port);
-	//!!!Guardfile is not working and needs to be setup LATER!!!!!!!!
-	//fs.writeFile('/start.log', 'started');
 });
+
+function checkCell(y, x) {
+	let newBoard = game.board;
+	newBoard[y][x] = game.roleBoard[y][x];
+	return newBoard;
+}
 
 io.on('connection', (socket) => {
 	//initial game request
@@ -27,13 +32,11 @@ io.on('connection', (socket) => {
 
 		//sending initial board to all players
 		io.emit('setBoard', game.board);
-		//console.log(game.board);
+	});
 
-		//allowing player to join the game when team has certain number of players
-		// let teamAPlayersCount = game.teamA.players.length;
-		// let teamBPlayersCount = game.teamB.players.length;
-
-		// if (teamAPlayersCount >= 1 && teamBPlayersCount >= 1) {
-		// }
+	//listening for clicked cell returning opened role
+	socket.on('handleClick', (coord) => {
+		let updatedBoard = checkCell(coord.y, coord.x);
+		io.emit('updatedBoard', updatedBoard);
 	});
 });

@@ -47,6 +47,7 @@ class Board extends Component {
 			],
 		],
 	};
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -59,10 +60,14 @@ class Board extends Component {
 	}
 
 	handleClick(cellCoord) {
-		console.log(cellCoord);
+		socket.emit('handleClick', cellCoord);
 	}
 
 	render() {
+		//setting state with new board and opened role
+		socket.on('updatedBoard', (data) => {
+			this.setState({ board: data });
+		});
 		let tblBoard = [];
 		//assigning key values and words to Cell component
 		for (let y = 0; y < 5; y++) {
