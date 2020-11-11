@@ -12,16 +12,27 @@ class Board extends Component {
 		super(props);
 		this.state = {
 			board: props.initialData.board,
+			initialBoard: this.requestInitialBoard(),
 			gameState: null,
 			playerId: props.initialData.playerId,
 			teamId: props.initialData.teamId,
 			spymaster: props.initialData.spymaster,
 		};
 		this.handleClick = this.handleClick.bind(this);
+		//this.requestInitialBoard = this.requestInitialBoard.bind(this);
 	}
 
 	handleClick(cellCoord) {
 		socket.emit('handleClick', cellCoord);
+	}
+
+	//renders twice??????????????????
+	requestInitialBoard() {
+		socket.emit('requestInitialBoard');
+		socket.on('Board', (data) => {
+			console.log(data);
+			return data;
+		});
 	}
 
 	render() {
@@ -29,6 +40,7 @@ class Board extends Component {
 		socket.on('updatedBoard', (data) => {
 			this.setState({ board: data });
 		});
+
 		let tblBoard = [];
 		//assigning key values and words to Cell component
 		for (let y = 0; y < 5; y++) {

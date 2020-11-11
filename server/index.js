@@ -34,6 +34,12 @@ io.on('connection', (socket) => {
 		io.emit('setBoard', game.board);
 	});
 
+	//sending initail board to Board Component
+	socket.on('requestInitialBoard', () => {
+		console.log(game.board);
+		io.emit('Board', game.board);
+	});
+
 	//listening for clicked cell returning opened role
 	socket.on('handleClick', (coord) => {
 		let updatedBoard = checkCell(coord.y, coord.x);
