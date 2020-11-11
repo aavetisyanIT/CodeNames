@@ -10,15 +10,35 @@ export default class LogIn extends Component {
 		this.state = {
 			name: '',
 			teamId: '',
-			addToGame: false,
 			playerId: '',
+			addToGame: false,
 		};
 		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	//setting state with input values
 	handleChange(event) {
 		this.setState({ [event.target.name]: event.target.value });
+	}
+	handleSubmit(e) {
+		e.preventDefault();
+		//sending name and team picked by player to set player and teams
+		const { name, teamId } = this.state;
+		socket.emit('initialGameRequest', { name, teamId });
+		//setting gameId and switching buttons to start game
+		socket.on('addToGame', () => {
+			this.setState({
+				playerId: socket.id,
+				addToGame: true,
+			});
+		});
+		const data = {
+			name: name,
+			playerId: socket.id,
+			teamId: teamId,
+		};
+		this.props.logInData(data);
 	}
 
 	render() {

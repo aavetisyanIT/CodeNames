@@ -13,17 +13,31 @@ export default class App extends Component {
 			name: '',
 		};
 	}
+	handleLogInData = (data) => {
+		this.setState({
+			name: data.name,
+			playerId: data.playerId,
+			teamId: data.teamId,
+		});
+	};
 
 	render() {
+		const { name, teamId, playerId } = this.state;
 		return (
 			<div className='App'>
 				<Switch>
 					<Route
 						exact
 						path='/'
-						render={() => <LogIn onChange={this.eventHandler} />}
+						render={() => <LogIn logInData={this.handleLogInData} />}
 					/>
-					<Route exact path='/game' render={() => <Board />} />
+					<Route
+						exact
+						path='/game'
+						render={() => (
+							<Board name={name} playerId={playerId} teamId={teamId} />
+						)}
+					/>
 				</Switch>
 			</div>
 		);

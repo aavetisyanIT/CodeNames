@@ -36,13 +36,14 @@ io.on('connection', (socket) => {
 	});
 
 	//sending initail board to Board Component
-	socket.on('boardRequest', () => {
-		io.emit('Board', game.board);
+	socket.on('boardRequest', (data) => {
+		console.log(`playerId: ${data}`);
+		io.emit('updatedBoard', game.board);
 	});
 
 	//listening for clicked cell returning opened role
-	socket.on('handleClick', (coord) => {
-		let updatedBoard = checkCell(coord.y, coord.x);
+	socket.on('clickRequest', (data) => {
+		let updatedBoard = checkCell(data.coord.y, data.coord.x);
 		io.emit('updatedBoard', updatedBoard);
 	});
 });
