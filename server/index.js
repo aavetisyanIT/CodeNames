@@ -30,12 +30,13 @@ io.on('connection', (socket) => {
 		game.addPlayer(newPlayer, socket);
 		game.addPlayerToTeam(newPlayer.id, data.teamId);
 
-		//sending initial board to all players
-		io.emit('setBoard', game.board);
+		//adding player to game
+
+		io.emit('addToGame', socket.id);
 	});
 
 	//sending initail board to Board Component
-	socket.on('requestInitialBoard', () => {
+	socket.on('boardRequest', () => {
 		io.emit('Board', game.board);
 	});
 

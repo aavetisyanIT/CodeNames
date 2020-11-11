@@ -8,37 +8,22 @@ export default class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			board: [],
-			name: '',
 			playerId: '',
 			teamId: '',
-			spymaster: '',
+			name: '',
 		};
 	}
-	render() {
-		const handleData = (game) => {
-			this.setState({
-				board: game.board,
-				name: game.name,
-				playerId: game.playerId,
-				teamId: game.teamId,
-				spymaster: false,
-			});
-		};
 
+	render() {
 		return (
 			<div className='App'>
 				<Switch>
 					<Route
 						exact
 						path='/'
-						render={() => <LogIn onChange={handleData} />}
+						render={() => <LogIn onChange={this.eventHandler} />}
 					/>
-					<Route
-						exact
-						path='/game'
-						render={() => <Board initialData={this.state} />}
-					/>
+					<Route exact path='/game' render={() => <Board />} />
 				</Switch>
 			</div>
 		);

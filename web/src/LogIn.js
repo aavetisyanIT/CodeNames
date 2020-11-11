@@ -8,14 +8,12 @@ export default class LogIn extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			board: [],
 			name: '',
 			teamId: '',
 			addToGame: false,
-			playerId: null,
+			playerId: '',
 		};
 		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	//setting state with input values
@@ -23,32 +21,12 @@ export default class LogIn extends Component {
 		this.setState({ [event.target.name]: event.target.value });
 	}
 
-	handleSubmit(event) {
-		event.preventDefault();
-		//sending name and team picked by player to set player and teams
-		const { name, teamId } = this.state;
-		socket.emit('initialGameRequest', { name, teamId });
-
-		//setting gameId and switching buttons to start game
-		socket.on('setBoard', (initialBoard) => {
-			this.setState(
-				{ board: initialBoard, playerId: socket.id, addToGame: true },
-				() => {
-					//sending initian board and new plaayer data to App component
-					if (this.props.onChange) {
-						this.props.onChange(this.state);
-					}
-				},
-			);
-		});
-	}
-
 	render() {
-		let addToGame;
+		let logInButton;
 		if (!this.state.addToGame) {
-			addToGame = <input type='submit' value='REQUEST TO JOIN A GAME' />;
+			logInButton = <input type='submit' value='REQUEST TO JOIN A GAME' />;
 		} else {
-			addToGame = (
+			logInButton = (
 				<p>
 					<Link to='/game'>GO TO THE GAME</Link>
 				</p>
@@ -80,7 +58,7 @@ export default class LogIn extends Component {
 							/>
 						</label>
 					</p>
-					{addToGame}
+					{logInButton}
 				</form>
 			</div>
 		);
