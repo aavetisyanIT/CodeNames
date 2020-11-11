@@ -33,7 +33,7 @@ class Board extends Component {
 		});
 	}
 	handleClick(newCoord) {
-		let data = { coord: newCoord, player: this.props.playerId };
+		let data = { coord: newCoord, playerId: this.props.playerId };
 		socket.emit('clickRequest', data);
 		socket.on('updatedBoard', (data) => {
 			this.setState({
