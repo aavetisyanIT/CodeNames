@@ -36,7 +36,6 @@ io.on('connection', (socket) => {
 
 	//sending initail board to Board Component
 	socket.on('requestInitialBoard', () => {
-		console.log(game.board);
 		io.emit('Board', game.board);
 	});
 
