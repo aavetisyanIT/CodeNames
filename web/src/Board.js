@@ -17,15 +17,9 @@ class Board extends Component {
 		this.boardRequest = this.boardRequest.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 	}
-	componentDidMount() {
-		// if (!this.props.playerId) {
-		// 	console.log('not logged in');
-		// }
-	}
 	boardRequest() {
-		console.log('function board request');
-		const { playerId } = this.props;
-		socket.emit('boardRequest', playerId);
+		const playerIdLocal = window.localStorage.getItem('playerId');
+		socket.emit('boardRequest', playerIdLocal);
 		socket.on('updatedBoard', (data) => {
 			this.setState({
 				board: data,

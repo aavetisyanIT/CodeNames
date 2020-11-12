@@ -12,14 +12,26 @@ export default class App extends Component {
 			teamId: '',
 			name: '',
 		};
+		this.handleLogInData = this.handleLogInData.bind(this);
+		this.checkPlayerId = this.checkPlayerId.bind(this);
 	}
-	handleLogInData = (data) => {
+	componentDidMount() {
+		this.checkPlayerId();
+	}
+
+	handleLogInData(data) {
 		this.setState({
 			name: data.name,
 			playerId: data.playerId,
 			teamId: data.teamId,
 		});
-	};
+	}
+	checkPlayerId() {
+		const playerIdLocal = window.localStorage.getItem('playerId');
+		if (this.state.playerId !== playerIdLocal) {
+			this.setState({ playerId: playerIdLocal });
+		}
+	}
 
 	render() {
 		const { name, teamId, playerId } = this.state;

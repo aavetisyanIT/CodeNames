@@ -38,6 +38,7 @@ io.on('connection', (socket) => {
 	//sending initail board to Board Component
 	socket.on('boardRequest', (data) => {
 		console.log(`playerId: ${data}`);
+		console.log(`Socket ID: ${socket.id}`);
 		io.emit('updatedBoard', game.board);
 	});
 

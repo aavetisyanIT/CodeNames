@@ -38,6 +38,7 @@ export default class LogIn extends Component {
 			playerId: socket.id,
 			teamId: teamId,
 		};
+		window.localStorage.setItem('playerId', data.playerId);
 		this.props.logInData(data);
 	}
 
