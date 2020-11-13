@@ -28,13 +28,16 @@ class Game {
 	}
 
 	addPlayerToTeam(playerId, teamId) {
-		let player = this.players[playerId];
-
-		if (player !== null) {
-			if (this.teamA.id === teamId) {
-				this.teamA.addPlayer(player);
-			} else if (this.teamB.id === teamId) {
-				this.teamB.addPlayer(player);
+		for (let player of this.players) {
+			if (player.id === playerId) {
+				let player = this.players[playerId];
+				if (player !== null) {
+					if (this.teamA.id === teamId) {
+						this.teamA.addPlayer(player);
+					} else if (this.teamB.id === teamId) {
+						this.teamB.addPlayer(player);
+					}
+				}
 			}
 		}
 	}
@@ -46,13 +49,6 @@ class Game {
 			this.spymasterTeamB.name = spymaster;
 		}
 	}
-
-	// notifyTeamA() {
-	// 	this.teamA.players.forEach(player =>
-	// 		let socket = this.sockets[player.id];
-	// 		socket.emit(‘message’, ‘message text’);
-	// 	);
-	// }
 
 	createBoard() {
 		let board = [];

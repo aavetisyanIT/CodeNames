@@ -42,18 +42,27 @@ io.on('connection', (socket) => {
 			let spymaster = teamPlayers[rand];
 			game.addSpymaster(spymaster);
 		}
+		// notifyTeamA();
 
 		let teamACount = game.teamA.players.length;
 		let teamBCount = game.teamB.players.length;
-		if (teamACount && teamBCount >= 2) {
+		if (teamACount && teamBCount >= 1) {
 			//adding player to game
 			selectSpymaster(game.teamA.players);
 			selectSpymaster(game.teamB.players);
 
 			io.emit('addToGame', socket.id);
 		}
+		// notifyTeamA() {
+		// 	this.teamA.players.forEach(player =>
+		// 		let socket = this.sockets[player.id];
+		// 		socket.emit(‘message’, ‘message text’);
+		// 	);
+		// }
 
-		console.log(game.spymasterTeamA);
+		function notifyTeamA() {
+			console.log(game.teamA.players);
+		}
 	});
 
 	//sending initail board to Board Component
