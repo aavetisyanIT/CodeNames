@@ -25,20 +25,39 @@ io.on('connection', (socket) => {
 	//initial game request
 	socket.on('initialGameRequest', (data) => {
 		//Creating a new Player
-		let newPlayer = new Player(socket.id, data.name, data.teamId);
+
+		let newPlayer = new Player(
+			socket.id,
+			data.socketId,
+			data.name,
+			data.teamId,
+		);
 
 		game.addPlayer(newPlayer, socket);
 		game.addPlayerToTeam(newPlayer.id, data.teamId);
 
-		//adding player to game
+		function selectSpymaster(teamPlayers) {
+			let teamCount = teamPlayers.length;
+			let rand = Math.floor(Math.random() * teamCount);
+			let spymaster = teamPlayers[rand];
+			game.addSpymaster(spymaster);
+		}
 
-		io.emit('addToGame', socket.id);
+		let teamACount = game.teamA.players.length;
+		let teamBCount = game.teamB.players.length;
+		if (teamACount && teamBCount >= 2) {
+			//adding player to game
+			selectSpymaster(game.teamA.players);
+			selectSpymaster(game.teamB.players);
+
+			io.emit('addToGame', socket.id);
+		}
+
+		console.log(game.spymasterTeamA);
 	});
 
 	//sending initail board to Board Component
 	socket.on('boardRequest', (data) => {
-		console.log(`playerId: ${data}`);
-		console.log(`Socket ID: ${socket.id}`);
 		io.emit('updatedBoard', game.board);
 	});
 

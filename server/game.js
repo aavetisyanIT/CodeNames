@@ -1,11 +1,12 @@
+const { Team } = require('./team.js');
 const randomWord = require('./random_word.js');
 const shuffle = require('./shuffle.js');
-const { Team } = require('./team.js');
 
 class Game {
 	board = [];
 	roleBoard = [];
-	spymaster = { name: '', id: '' };
+	spymasterTeamA = {};
+	spymasterTeamB = {};
 
 	constructor() {
 		//setting gameId
@@ -14,8 +15,6 @@ class Game {
 		this.createRoleBoard();
 		//generate board of ramdom words
 		this.createBoard();
-		//choose spymaster
-		this.pickSpymaster();
 
 		this.teamA = new Team('teamA');
 		this.teamB = new Team('teamB');
@@ -39,6 +38,14 @@ class Game {
 			}
 		}
 	}
+	addSpymaster(spymaster) {
+		console.log(spymaster);
+		if (spymaster.teamId === 'teamA') {
+			this.spymasterTeamA = spymaster;
+		} else if (spymaster.teamId === 'teamB') {
+			this.spymasterTeamB.name = spymaster;
+		}
+	}
 
 	// notifyTeamA() {
 	// 	this.teamA.players.forEach(player =>
@@ -46,10 +53,6 @@ class Game {
 	// 		socket.emit(‘message’, ‘message text’);
 	// 	);
 	// }
-
-	pickSpymaster() {
-		// console.log(this.players);
-	}
 
 	createBoard() {
 		let board = [];

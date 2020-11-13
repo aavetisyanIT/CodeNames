@@ -25,7 +25,8 @@ export default class LogIn extends Component {
 		e.preventDefault();
 		//sending name and team picked by player to set player and teams
 		const { name, teamId } = this.state;
-		socket.emit('initialGameRequest', { name, teamId });
+		const socketId = socket.id;
+		socket.emit('initialGameRequest', { name, teamId, socketId });
 		//setting gameId and switching buttons to start game
 		socket.on('addToGame', () => {
 			this.setState({
