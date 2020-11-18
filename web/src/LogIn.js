@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
+import { GameContext } from './context/gameContext';
 
 const socket = io.connect('http://localhost:4000');
 
-export default function LogIn(props) {
-	const [name, setName] = useState('');
-	const [teamId, setTeamId] = useState('');
-	const [playerId, setPlayerId] = useState('');
-	const [addToGame, setAddToGame] = useState(false);
+export default function LogIn() {
+	const { name, setName } = useContext(GameContext);
+	const { teamId, setTeamId } = useContext(GameContext);
+	const { setPlayerId } = useContext(GameContext);
+	const { addToGame, setAddToGame } = useContext(GameContext);
 
 	//setting state with input values
 	const handleNameChange = (e) => {
@@ -28,13 +29,10 @@ export default function LogIn(props) {
 			setPlayerId(socket.id);
 			setAddToGame(true);
 		});
-		const data = {
-			name: name,
-			playerId: socket.id,
-			teamId: teamId,
-		};
-		window.localStorage.setItem('playerId', playerId);
-		props.logInData(data);
+		window.localStorage.setItem('playerId', socket.id);
+		setName(name);
+		setPlayerId(socket.id);
+		setTeamId(teamId);
 	};
 
 	let logInButton;
@@ -55,7 +53,6 @@ export default function LogIn(props) {
 					Name:
 					<input
 						type='text'
-						name='name'
 						value={name}
 						placeholder='Name'
 						onChange={handleNameChange}
@@ -66,7 +63,6 @@ export default function LogIn(props) {
 						Team:
 						<input
 							type='text'
-							name='teamId'
 							value={teamId}
 							placeholder='teamA or teamB'
 							onChange={handleTeamChange}

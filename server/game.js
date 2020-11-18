@@ -7,6 +7,8 @@ class Game {
 	roleBoard = [];
 	spymasterTeamA = {};
 	spymasterTeamB = {};
+	//teamA always has a frist move
+	currentMove = 'teamA';
 
 	constructor() {
 		//setting gameId
@@ -28,21 +30,16 @@ class Game {
 	}
 
 	addPlayerToTeam(playerId, teamId) {
-		for (let player of this.players) {
-			if (player.id === playerId) {
-				let player = this.players[playerId];
-				if (player !== null) {
-					if (this.teamA.id === teamId) {
-						this.teamA.addPlayer(player);
-					} else if (this.teamB.id === teamId) {
-						this.teamB.addPlayer(player);
-					}
-				}
+		let player = this.players[playerId];
+		if (player !== null) {
+			if (this.teamA.id === teamId) {
+				this.teamA.addPlayer(player);
+			} else if (this.teamB.id === teamId) {
+				this.teamB.addPlayer(player);
 			}
 		}
 	}
 	addSpymaster(spymaster) {
-		console.log(spymaster);
 		if (spymaster.teamId === 'teamA') {
 			this.spymasterTeamA = spymaster;
 		} else if (spymaster.teamId === 'teamB') {

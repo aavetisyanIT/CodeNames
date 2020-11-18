@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const { emit } = require('process');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 4000;
@@ -21,11 +22,16 @@ function checkCell(y, x) {
 	return newBoard;
 }
 
-io.on('connection', (socket) => {
+function teamMessage(team, msg) {
+	team.players.map((player) => {
+		io.to(player.id).emit('teamAMessages', msg);
+	});
+}
+
+io.sockets.on('connection', (socket) => {
 	//initial game request
 	socket.on('initialGameRequest', (data) => {
 		//Creating a new Player
-
 		let newPlayer = new Player(
 			socket.id,
 			data.socketId,
@@ -42,34 +48,33 @@ io.on('connection', (socket) => {
 			let spymaster = teamPlayers[rand];
 			game.addSpymaster(spymaster);
 		}
-		// notifyTeamA();
+
+		//create rooms for each team and add player to the room
+		if (data.teamId === 'teamA') {
+			socket.join('room' + 1);
+		} else if (data.teamId === 'teamB') {
+			socket.join('room' + 2);
+		}
 
 		let teamACount = game.teamA.players.length;
 		let teamBCount = game.teamB.players.length;
 		if (teamACount && teamBCount >= 1) {
-			//adding player to game
 			selectSpymaster(game.teamA.players);
 			selectSpymaster(game.teamB.players);
-
+			//letting player join the game
 			io.emit('addToGame', socket.id);
 		}
-		// notifyTeamA() {
-		// 	this.teamA.players.forEach(player =>
-		// 		let socket = this.sockets[player.id];
-		// 		socket.emit(‘message’, ‘message text’);
-		// 	);
-		// }
+	});
 
-		function notifyTeamA() {
-			console.log(game.teamA.players);
-		}
+	let curMove = true;
+	socket.on('moveRequest', (data) => {
+		teamMessage(game.teamA, curMove);
 	});
 
 	//sending initail board to Board Component
 	socket.on('boardRequest', (data) => {
 		io.emit('updatedBoard', game.board);
 	});
-
 	//listening for clicked cell returning opened role
 	socket.on('clickRequest', (data) => {
 		let updatedBoard = checkCell(data.coord.y, data.coord.x);
