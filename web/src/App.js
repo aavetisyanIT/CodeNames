@@ -1,57 +1,48 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import LogIn from './LogIn';
 import Board from './Board';
 import './App.css';
 
-export default class App extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			playerId: '',
-			teamId: '',
-			name: '',
-		};
-		this.handleLogInData = this.handleLogInData.bind(this);
-		this.checkPlayerId = this.checkPlayerId.bind(this);
-	}
-	componentDidMount() {
-		this.checkPlayerId();
-	}
+export default function App() {
+	const [playerId, setPlayerId] = useState('');
+	const [teamId, setTeamId] = useState('');
+	const [name, setName] = useState('');
 
-	handleLogInData(data) {
-		this.setState({
-			name: data.name,
-			playerId: data.playerId,
-			teamId: data.teamId,
-		});
-	}
-	checkPlayerId() {
+	useEffect(() => {
+		resetPlayerId();
+	}, [playerId]);
+
+	const handleLogInData = (data) => {
+		setName(data.name);
+		setPlayerId(data.playerId);
+		setTeamId(data.teamId);
+	};
+	const resetPlayerId = () => {
 		const playerIdLocal = window.localStorage.getItem('playerId');
-		if (this.state.playerId !== playerIdLocal) {
-			this.setState({ playerId: playerIdLocal });
-		}
-	}
+		setPlayerId(playerIdLocal);
+	};
 
-	render() {
-		const { name, teamId, playerId } = this.state;
-		return (
-			<div className='App'>
-				<Switch>
-					<Route
-						exact
-						path='/'
-						render={() => <LogIn logInData={this.handleLogInData} />}
-					/>
-					<Route
-						exact
-						path='/game'
-						render={() => (
-							<Board name={name} playerId={playerId} teamId={teamId} />
-						)}
-					/>
-				</Switch>
-			</div>
-		);
-	}
+	return (
+		<div className='App'>
+			<Switch>
+				<Route
+					exact
+					path='/'
+					render={() => <LogIn logInData={handleLogInData} />}
+				/>
+				<Route
+					exact
+					path='/game'
+					render={() => (
+						<Board
+							name={name}
+							playerId={playerId}
+							teamId={teamId}
+						/>
+					)}
+				/>
+			</Switch>
+		</div>
+	);
 }
