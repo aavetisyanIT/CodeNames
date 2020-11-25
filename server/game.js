@@ -59,15 +59,6 @@ class Game {
 		});
 	}
 
-	notifyTeam(team, messageName, message) {
-		let players = Array.from(this.players.values());
-		players.filter((player) => player.teamId == team);
-		players.forEach((player) => {
-			let socket = this.sockets.get(player.id);
-			socket.emit(messageName, message);
-		});
-	}
-
 	teamAPlayers() {
 		let players = Array.from(this.players.values());
 		return players.filter((player) => player.teamId == 'teamA');

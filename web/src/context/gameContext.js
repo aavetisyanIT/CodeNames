@@ -1,8 +1,7 @@
-import React, { createContext, useState, useMemo } from 'react';
+import React, { createContext, useState } from 'react';
 import { pendingBoard } from '../constants';
 
 export const GameContext = createContext();
-export const BoardContext = createContext();
 
 export function GameStateProvider(props) {
 	const [name, setName] = useState('');
@@ -11,14 +10,15 @@ export function GameStateProvider(props) {
 	const [addToGame, setAddToGame] = useState(false);
 	const [board, setBoard] = useState(pendingBoard);
 	const [currentMove, setCurrentMove] = useState(false);
+	const [players, setPlayers] = useState([]);
 
 	if (!playerId) {
 		const localPlayerId = window.localStorage.getItem('playerId');
 		setPlayerId(localPlayerId);
 	}
 
-	const providerValue = useMemo(
-		() => ({
+	let state = {
+		allContextValue: {
 			name,
 			setName,
 			teamId,
@@ -31,14 +31,14 @@ export function GameStateProvider(props) {
 			setBoard,
 			currentMove,
 			setCurrentMove,
-		}),
-		[name, teamId, playerId, addToGame, board, currentMove],
-	);
+			players,
+			setPlayers,
+		},
+	};
+
 	return (
-		<BoardContext.Provider value={providerValue}>
-			<GameContext.Provider value={providerValue}>
-				{props.children}
-			</GameContext.Provider>
-		</BoardContext.Provider>
+		<GameContext.Provider value={state.allContextValue}>
+			{props.children}
+		</GameContext.Provider>
 	);
 }

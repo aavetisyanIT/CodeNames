@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import { GameContext } from './context/gameContext';
+import PlayersList from './PlayersList';
 
 const socket = io.connect('http://localhost:4000');
 
@@ -10,6 +11,15 @@ export default function LogIn() {
 	const { teamId, setTeamId } = useContext(GameContext);
 	const { setPlayerId } = useContext(GameContext);
 	const { addToGame, setAddToGame } = useContext(GameContext);
+	const { setPlayers } = useContext(GameContext);
+
+	useEffect(() => {
+		let currentPlayers = [];
+		socket.on('playersUpdate', (object) => {
+			object.forEach((player) => currentPlayers.push(player.name));
+		});
+		setPlayers(currentPlayers);
+	}, [setPlayers]);
 
 	//setting state with input values
 	const handleNameChange = (e) => {
@@ -29,10 +39,6 @@ export default function LogIn() {
 			setPlayerId(socket.id);
 			setAddToGame(true);
 		});
-		socket.on('playersUpdate', (object) => {
-			console.log(socket.id);
-			console.log(object);
-		});
 		window.localStorage.setItem('playerId', socket.id);
 		setName(name);
 		setPlayerId(socket.id);
@@ -45,10 +51,11 @@ export default function LogIn() {
 	} else {
 		logInButton = (
 			<p>
-				<Link to='/game'>GO TO THE GAME</Link>
+				<Link to='/game'>START PLAYING</Link>
 			</p>
 		);
 	}
+
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
@@ -63,35 +70,14 @@ export default function LogIn() {
 					/>
 				</label>
 				<div onChange={handleTeamChange}>
-					<input
-						type='radio'
-						value='teamA'
-						// checked={setTeamId('teamA')}
-						name='teamId'
-					/>
+					<input type='radio' value='teamA' name='teamId' />
 					Red Team
-					<input
-						type='radio'
-						value='teamB'
-						// checked={setTeamId('teamB')}
-						name='teamId'
-					/>
+					<input type='radio' value='teamB' name='teamId' />
 					Blue Team
 				</div>
-				{/* 
-				<p>
-					<label>
-						Team:
-						<input
-							type='text'
-							value={teamId}
-							placeholder='teamA or teamB'
-							onChange={handleTeamChange}
-						/>
-					</label>
-				</p> */}
 				{logInButton}
 			</form>
+			<PlayersList />
 		</div>
 	);
 }

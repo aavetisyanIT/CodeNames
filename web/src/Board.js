@@ -2,14 +2,14 @@ import React, { useContext, useEffect } from 'react';
 import Cell from './Cell';
 import './Board.css';
 import io from 'socket.io-client';
-import { BoardContext } from './context/gameContext';
+import { GameContext } from './context/gameContext';
 
 const socket = io.connect('http://localhost:4000');
 
 export default function Board() {
-	const { board, setBoard } = useContext(BoardContext);
-	const { playerId } = useContext(BoardContext);
-	const { teamId } = useContext(BoardContext);
+	const { board, setBoard } = useContext(GameContext);
+	const { playerId } = useContext(GameContext);
+	const { teamId } = useContext(GameContext);
 	//const { currentMove, setCurrentMove } = useContext(gameContext);
 
 	useEffect(() => {
@@ -25,7 +25,7 @@ export default function Board() {
 	const handleClick = (newCoord) => {
 		let data = { coord: newCoord, playerId: playerId };
 		socket.emit('clickRequest', data);
-		socket.on('updatedBoard', (data) => {
+		socket.on('testMsg', (data) => {
 			setBoard(data);
 		});
 		socket.on('playersUpdate', (data) => {
