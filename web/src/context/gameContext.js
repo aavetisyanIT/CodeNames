@@ -11,6 +11,7 @@ export function GameStateProvider(props) {
 	const [board, setBoard] = useState(pendingBoard);
 	const [currentMove, setCurrentMove] = useState(false);
 	const [players, setPlayers] = useState([]);
+	const [joinButtonDisabled, setJoinButtonDisabled] = useState(false);
 
 	if (!playerId) {
 		const localPlayerId = window.localStorage.getItem('playerId');
@@ -33,6 +34,8 @@ export function GameStateProvider(props) {
 			setCurrentMove,
 			players,
 			setPlayers,
+			joinButtonDisabled,
+			setJoinButtonDisabled,
 		},
 	};
 

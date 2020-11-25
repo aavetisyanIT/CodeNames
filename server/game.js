@@ -35,14 +35,13 @@ class Game {
 		if (player !== null) {
 			if (this.teamA.id === teamId) {
 				this.teamA.addPlayer(player);
-				this.notifyTeamAPlayersUpdate();
+				//this.notifyTeamAPlayersUpdate();
 			} else if (this.teamB.id === teamId) {
 				this.teamB.addPlayer(player);
-				this.notifyTeamBPlayersUpdate();
+				//this.notifyTeamBPlayersUpdate();
 			}
 		}
 	}
-
 	notifyTeamAPlayersUpdate() {
 		let players = this.teamAPlayers();
 		players.forEach((player) => {

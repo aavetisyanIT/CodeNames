@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import { GameContext } from './context/gameContext';
@@ -11,15 +11,9 @@ export default function LogIn() {
 	const { teamId, setTeamId } = useContext(GameContext);
 	const { setPlayerId } = useContext(GameContext);
 	const { addToGame, setAddToGame } = useContext(GameContext);
-	const { setPlayers } = useContext(GameContext);
-
-	useEffect(() => {
-		let currentPlayers = [];
-		socket.on('playersUpdate', (object) => {
-			object.forEach((player) => currentPlayers.push(player.name));
-		});
-		setPlayers(currentPlayers);
-	}, [setPlayers]);
+	const { joinButtonDisabled, setJoinButtonDisabled } = useContext(
+		GameContext,
+	);
 
 	//setting state with input values
 	const handleNameChange = (e) => {
@@ -33,26 +27,35 @@ export default function LogIn() {
 		e.preventDefault();
 		//sending name and team picked by player to set player and teams
 		const socketId = socket.id;
-		socket.emit('initialGameRequest', { name, teamId, socketId });
-		//setting gameId and switching buttons to start game
-		socket.on('addToGame', () => {
-			setPlayerId(socket.id);
-			setAddToGame(true);
-		});
+
+		if (name !== '' && teamId !== '') {
+			socket.emit('initialGameRequest', { name, teamId, socketId });
+			//setting gameId and switching buttons to start game
+			socket.on('addToGame', () => {
+				setPlayerId(socket.id);
+				setAddToGame(true);
+			});
+		} else alert('Both name and team are required');
 		window.localStorage.setItem('playerId', socket.id);
 		setName(name);
 		setPlayerId(socket.id);
 		setTeamId(teamId);
+		name !== '' && teamId !== ''
+			? setJoinButtonDisabled(true)
+			: setJoinButtonDisabled(false);
 	};
 
 	let logInButton;
 	if (!addToGame) {
-		logInButton = <input type='submit' value='REQUEST TO JOIN A GAME' />;
+		logInButton = <input type='submit' value='JOIN TO SEE PLAYERS' />;
 	} else {
 		logInButton = (
-			<p>
-				<Link to='/game'>START PLAYING</Link>
-			</p>
+			<>
+				<p>
+					<Link to='/game'>START PLAYING</Link>
+				</p>
+				<PlayersList />
+			</>
 		);
 	}
 
@@ -60,24 +63,27 @@ export default function LogIn() {
 		<div>
 			<form onSubmit={handleSubmit}>
 				<h4>Join YOUR TEAM</h4>
-				<label>
-					Name:
-					<input
-						type='text'
-						value={name}
-						placeholder='Name'
-						onChange={handleNameChange}
-					/>
-				</label>
+				<label>Name: </label>
+				<input type='text' value={name} onChange={handleNameChange} />
 				<div onChange={handleTeamChange}>
-					<input type='radio' value='teamA' name='teamId' />
+					<label>Team:</label>
+					<input
+						type='radio'
+						value='teamA'
+						disabled={joinButtonDisabled}
+						name='teamId'
+					/>
 					Red Team
-					<input type='radio' value='teamB' name='teamId' />
+					<input
+						type='radio'
+						value='teamB'
+						disabled={joinButtonDisabled}
+						name='teamId'
+					/>
 					Blue Team
 				</div>
 				{logInButton}
 			</form>
-			<PlayersList />
 		</div>
 	);
 }

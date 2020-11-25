@@ -59,4 +59,24 @@ io.sockets.on('connection', (socket) => {
 		let updatedBoard = checkCell(data.coord.y, data.coord.x);
 		io.emit('updatedBoard', updatedBoard);
 	});
+
+	// socket.on('requestPlayersUpadate', (data) => {
+	// 	if (data === '') {
+	// 		return;
+	// 	} else if (data === 'teamA') {
+	// 		let players = Array.from(game.players.values());
+	// 		players = players.filter((player) => player.teamId == 'teamA');
+	// 		players.forEach((player) => {
+	// 			console.log(player.id);
+	// 			io.to(player.id).emit('playersUpdate', players);
+	// 		});
+	// 	} else if (data === 'teamB') {
+	// 		let players = Array.from(game.players.values());
+	// 		players = players.filter((player) => player.teamId == 'teamB');
+	// 		players.forEach((player) => {
+	// 			console.log(player.id);
+	// 			io.to(player.id).emit('playersUpdate', players);
+	// 		});
+	// 	}
+	// });
 });
