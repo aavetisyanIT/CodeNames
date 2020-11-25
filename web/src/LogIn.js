@@ -29,6 +29,10 @@ export default function LogIn() {
 			setPlayerId(socket.id);
 			setAddToGame(true);
 		});
+		socket.on('playersUpdate', (object) => {
+			console.log(socket.id);
+			console.log(object);
+		});
 		window.localStorage.setItem('playerId', socket.id);
 		setName(name);
 		setPlayerId(socket.id);
@@ -58,6 +62,23 @@ export default function LogIn() {
 						onChange={handleNameChange}
 					/>
 				</label>
+				<div onChange={handleTeamChange}>
+					<input
+						type='radio'
+						value='teamA'
+						// checked={setTeamId('teamA')}
+						name='teamId'
+					/>
+					Red Team
+					<input
+						type='radio'
+						value='teamB'
+						// checked={setTeamId('teamB')}
+						name='teamId'
+					/>
+					Blue Team
+				</div>
+				{/* 
 				<p>
 					<label>
 						Team:
@@ -68,7 +89,7 @@ export default function LogIn() {
 							onChange={handleTeamChange}
 						/>
 					</label>
-				</p>
+				</p> */}
 				{logInButton}
 			</form>
 		</div>

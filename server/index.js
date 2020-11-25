@@ -11,6 +11,7 @@ const { gameManager } = require('./game_manager');
 const { Player } = require('./player.js');
 
 let game = new Game();
+game.io = io;
 
 server.listen(port, function () {
 	console.log('Server listening at port %d', port);
@@ -20,12 +21,6 @@ function checkCell(y, x) {
 	let newBoard = game.board;
 	newBoard[y][x] = game.roleBoard[y][x];
 	return newBoard;
-}
-
-function teamMessage(team, msg) {
-	team.players.map((player) => {
-		io.to(player.id).emit('teamAMessages', msg);
-	});
 }
 
 io.sockets.on('connection', (socket) => {
@@ -38,37 +33,21 @@ io.sockets.on('connection', (socket) => {
 			data.name,
 			data.teamId,
 		);
-
 		game.addPlayer(newPlayer, socket);
 		game.addPlayerToTeam(newPlayer.id, data.teamId);
-
-		function selectSpymaster(teamPlayers) {
-			let teamCount = teamPlayers.length;
-			let rand = Math.floor(Math.random() * teamCount);
-			let spymaster = teamPlayers[rand];
-			game.addSpymaster(spymaster);
-		}
-
-		//create rooms for each team and add player to the room
-		if (data.teamId === 'teamA') {
-			socket.join('room' + 1);
-		} else if (data.teamId === 'teamB') {
-			socket.join('room' + 2);
-		}
 
 		let teamACount = game.teamA.players.length;
 		let teamBCount = game.teamB.players.length;
 		if (teamACount && teamBCount >= 1) {
-			selectSpymaster(game.teamA.players);
-			selectSpymaster(game.teamB.players);
 			//letting player join the game
 			io.emit('addToGame', socket.id);
 		}
 	});
 
-	let curMove = true;
-	socket.on('moveRequest', (data) => {
-		teamMessage(game.teamA, curMove);
+	socket.on('moveRequest', () => {
+		game.teamA.players.map((player) => {
+			io.to(player.id).emit('notifyTeam', 'teamA goes first');
+		});
 	});
 
 	//sending initail board to Board Component
@@ -79,5 +58,6 @@ io.sockets.on('connection', (socket) => {
 	socket.on('clickRequest', (data) => {
 		let updatedBoard = checkCell(data.coord.y, data.coord.x);
 		io.emit('updatedBoard', updatedBoard);
+		game.notifyTeam('teamA', 'testMsg', 'hello teamA');
 	});
 });

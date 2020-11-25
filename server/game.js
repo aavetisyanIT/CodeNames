@@ -5,8 +5,9 @@ const shuffle = require('./shuffle.js');
 class Game {
 	board = [];
 	roleBoard = [];
-	spymasterTeamA = {};
-	spymasterTeamB = {};
+	io = {};
+	// spymasterTeamA = {};
+	// spymasterTeamB = {};
 	//teamA always has a frist move
 	currentMove = 'teamA';
 
@@ -25,26 +26,62 @@ class Game {
 	}
 
 	addPlayer(newPlayer, socket) {
-		this.players[newPlayer.id] = newPlayer;
-		this.sockets[newPlayer.id] = socket;
+		this.players.set(newPlayer.id, newPlayer);
+		this.sockets.set(newPlayer.id, socket);
 	}
 
 	addPlayerToTeam(playerId, teamId) {
-		let player = this.players[playerId];
+		let player = this.players.get(playerId);
 		if (player !== null) {
 			if (this.teamA.id === teamId) {
 				this.teamA.addPlayer(player);
+				this.notifyTeamAPlayersUpdate();
 			} else if (this.teamB.id === teamId) {
 				this.teamB.addPlayer(player);
+				this.notifyTeamBPlayersUpdate();
 			}
 		}
 	}
-	addSpymaster(spymaster) {
-		if (spymaster.teamId === 'teamA') {
-			this.spymasterTeamA = spymaster;
-		} else if (spymaster.teamId === 'teamB') {
-			this.spymasterTeamB.name = spymaster;
-		}
+
+	notifyTeamAPlayersUpdate() {
+		let players = this.teamAPlayers();
+		players.forEach((player) => {
+			let socket = this.sockets.get(player.id);
+			socket.emit('playersUpdate', players);
+		});
+	}
+
+	notifyTeamBPlayersUpdate() {
+		let players = this.teamBPlayers();
+		players.forEach((player) => {
+			let socket = this.sockets.get(player.id);
+			socket.emit('playersUpdate', players);
+		});
+	}
+
+	notifyTeam(team, messageName, message) {
+		let players = Array.from(this.players.values());
+		players.filter((player) => player.teamId == team);
+		players.forEach((player) => {
+			let socket = this.sockets.get(player.id);
+			socket.emit(messageName, message);
+		});
+	}
+
+	teamAPlayers() {
+		let players = Array.from(this.players.values());
+		return players.filter((player) => player.teamId == 'teamA');
+	}
+	teamBPlayers() {
+		let players = Array.from(this.players.values());
+		return players.filter((player) => player.teamId == 'teamB');
+	}
+
+	selectSpymaster(teamPlayers) {
+		let teamCount = teamPlayers.length;
+		let rand = Math.floor(Math.random() * teamCount);
+		let spymaster = teamPlayers[rand];
+		game.addSpymaster(spymaster);
 	}
 
 	createBoard() {

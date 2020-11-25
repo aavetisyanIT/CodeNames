@@ -28,6 +28,9 @@ export default function Board() {
 		socket.on('updatedBoard', (data) => {
 			setBoard(data);
 		});
+		socket.on('playersUpdate', (data) => {
+			console.log(data);
+		});
 	};
 
 	let tblBoard = [];
