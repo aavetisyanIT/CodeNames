@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import { GameContext } from './context/gameContext';
@@ -6,7 +6,9 @@ import PlayersList from './PlayersList';
 
 const socket = io.connect('http://localhost:4000');
 
-export default function LogIn() {
+const LogIn = React.memo(() => {
+	console.log('LogIn');
+
 	const { name, setName } = useContext(GameContext);
 	const { teamId, setTeamId } = useContext(GameContext);
 	const { setPlayerId } = useContext(GameContext);
@@ -22,28 +24,38 @@ export default function LogIn() {
 	const handleTeamChange = (e) => {
 		setTeamId(e.target.value);
 	};
+	const handleSubmit = useCallback(
+		(e) => {
+			e.preventDefault();
+			//sending name and team picked by player to set player and teams
+			const socketId = socket.id;
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		//sending name and team picked by player to set player and teams
-		const socketId = socket.id;
-
-		if (name !== '' && teamId !== '') {
-			socket.emit('initialGameRequest', { name, teamId, socketId });
-			//setting gameId and switching buttons to start game
-			socket.on('addToGame', () => {
-				setPlayerId(socket.id);
-				setAddToGame(true);
-			});
-		} else alert('Both name and team are required');
-		window.localStorage.setItem('playerId', socket.id);
-		setName(name);
-		setPlayerId(socket.id);
-		setTeamId(teamId);
-		name !== '' && teamId !== ''
-			? setJoinButtonDisabled(true)
-			: setJoinButtonDisabled(false);
-	};
+			if (name !== '' && teamId !== '') {
+				socket.emit('initialGameRequest', { name, teamId, socketId });
+				//setting gameId and switching buttons to start game
+				socket.on('addToGame', () => {
+					setPlayerId(socket.id);
+					setAddToGame(true);
+				});
+			} else alert('Both name and team are required');
+			window.localStorage.setItem('playerId', socket.id);
+			setName(name);
+			setPlayerId(socket.id);
+			setTeamId(teamId);
+			name !== '' && teamId !== ''
+				? setJoinButtonDisabled(true)
+				: setJoinButtonDisabled(false);
+		},
+		[
+			name,
+			setAddToGame,
+			setJoinButtonDisabled,
+			setName,
+			setPlayerId,
+			setTeamId,
+			teamId,
+		],
+	);
 
 	let logInButton;
 	if (!addToGame) {
@@ -64,7 +76,12 @@ export default function LogIn() {
 			<form onSubmit={handleSubmit}>
 				<h4>Join YOUR TEAM</h4>
 				<label>Name: </label>
-				<input type='text' value={name} onChange={handleNameChange} />
+				<input
+					type='text'
+					value={name}
+					onChange={handleNameChange}
+					disabled={joinButtonDisabled}
+				/>
 				<div onChange={handleTeamChange}>
 					<label>Team:</label>
 					<input
@@ -86,4 +103,6 @@ export default function LogIn() {
 			</form>
 		</div>
 	);
-}
+});
+
+export default LogIn;

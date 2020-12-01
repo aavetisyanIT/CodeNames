@@ -1,32 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { GameContext } from './context/gameContext';
 //import io from 'socket.io-client';
 
 //const socket = io.connect('http://localhost:4000');
 
-export default function PlayersList() {
-	const { players, setPlayers } = useContext(GameContext);
+const PlayersList = React.memo(() => {
+	console.log('PlayersList');
+
+	const { players } = useContext(GameContext);
 	const { teamId } = useContext(GameContext);
-
-	// useEffect(() => {
-	// 	let currentPlayers = [];
-
-	// 	console.log('in useEffect');
-	// 	socket.emit('requestPlayersUpadate', teamId);
-	// 	// socket.on('test', (data) => {
-	// 	// 	console.log(data);
-	// 	// });
-	// 	socket.on('playersUpdate', (object) => {
-	// 		console.log(object);
-	// 		object.forEach((player) => currentPlayers.push(player.name));
-	// 	});
-	// 	setPlayers(currentPlayers);
-	// }, [teamId, setPlayers]);
-
-	// socket.on('playersUpdate', (data) => {
-	// 	console.log('WORKING!!!!');
-	// 	console.log(data);
-	// });
 
 	let title;
 	if (teamId === '') {
@@ -44,4 +26,6 @@ export default function PlayersList() {
 			))}
 		</div>
 	);
-}
+});
+
+export default PlayersList;

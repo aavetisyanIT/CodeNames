@@ -43,7 +43,6 @@ io.sockets.on('connection', (socket) => {
 			io.emit('addToGame', socket.id);
 		}
 	});
-
 	socket.on('moveRequest', () => {
 		game.teamA.players.map((player) => {
 			io.to(player.id).emit('notifyTeam', 'teamA goes first');

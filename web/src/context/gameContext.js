@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useMemo } from 'react';
 import { pendingBoard } from '../constants';
 
 export const GameContext = createContext();
@@ -18,8 +18,8 @@ export function GameStateProvider(props) {
 		setPlayerId(localPlayerId);
 	}
 
-	let state = {
-		allContextValue: {
+	const providerValue = useMemo(
+		() => ({
 			name,
 			setName,
 			teamId,
@@ -36,11 +36,21 @@ export function GameStateProvider(props) {
 			setPlayers,
 			joinButtonDisabled,
 			setJoinButtonDisabled,
-		},
-	};
+		}),
+		[
+			name,
+			teamId,
+			playerId,
+			addToGame,
+			board,
+			currentMove,
+			joinButtonDisabled,
+			players,
+		],
+	);
 
 	return (
-		<GameContext.Provider value={state.allContextValue}>
+		<GameContext.Provider value={providerValue}>
 			{props.children}
 		</GameContext.Provider>
 	);

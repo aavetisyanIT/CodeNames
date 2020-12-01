@@ -6,21 +6,23 @@ import { GameContext } from './context/gameContext';
 
 const socket = io.connect('http://localhost:4000');
 
-export default function Board() {
+const Board = React.memo(() => {
+	console.log('Board');
+
 	const { board, setBoard } = useContext(GameContext);
 	const { playerId } = useContext(GameContext);
 	const { teamId } = useContext(GameContext);
-	//const { currentMove, setCurrentMove } = useContext(gameContext);
+
+	const boardRequest = () => {
+		socket.emit('boardRequest', playerId);
+		socket.on('updatedBoard', (data) => {
+			setBoard(data);
+		});
+	};
 
 	useEffect(() => {
-		const boardRequest = () => {
-			socket.emit('boardRequest', playerId);
-			socket.on('updatedBoard', (data) => {
-				setBoard(data);
-			});
-		};
 		boardRequest();
-	}, [playerId, setBoard]);
+	}, []);
 
 	const handleClick = (newCoord) => {
 		let data = { coord: newCoord, playerId: playerId };
@@ -54,10 +56,10 @@ export default function Board() {
 	return (
 		<div>
 			<h1>{teamId === 'teamA' ? 'Red' : 'Blue'} team </h1>
-			{/* <div className='Board-title'>
-					<div className='neon-orange'>Code</div>
-					<div className='neon-blue'>Names</div>
-				</div> */}
+			<div className='Board-title'>
+				<div className='neon-orange'>Code</div>
+				<div className='neon-blue'>Names</div>
+			</div>
 			<table className='Board'>
 				<tbody>{tblBoard}</tbody>
 			</table>
@@ -65,4 +67,6 @@ export default function Board() {
 			<p>Clue Number:</p>
 		</div>
 	);
-}
+});
+
+export default Board;
