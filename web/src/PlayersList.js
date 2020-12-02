@@ -4,7 +4,7 @@ import { GameContext } from './context/gameContext';
 
 //const socket = io.connect('http://localhost:4000');
 
-const PlayersList = React.memo(() => {
+const PlayersList = () => {
 	console.log('PlayersList');
 
 	const { players } = useContext(GameContext);
@@ -26,6 +26,6 @@ const PlayersList = React.memo(() => {
 			))}
 		</div>
 	);
-});
+};
 
 export default PlayersList;

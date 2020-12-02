@@ -6,7 +6,7 @@ import PlayersList from './PlayersList';
 
 const socket = io.connect('http://localhost:4000');
 
-const LogIn = React.memo(() => {
+const LogIn = () => {
 	console.log('LogIn');
 
 	const { name, setName } = useContext(GameContext);
@@ -103,6 +103,6 @@ const LogIn = React.memo(() => {
 			</form>
 		</div>
 	);
-});
+};
 
 export default LogIn;

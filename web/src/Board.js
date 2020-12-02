@@ -6,9 +6,7 @@ import { GameContext } from './context/gameContext';
 
 const socket = io.connect('http://localhost:4000');
 
-const Board = React.memo(() => {
-	console.log('Board');
-
+const Board = () => {
 	const { board, setBoard } = useContext(GameContext);
 	const { playerId } = useContext(GameContext);
 	const { teamId } = useContext(GameContext);
@@ -67,6 +65,6 @@ const Board = React.memo(() => {
 			<p>Clue Number:</p>
 		</div>
 	);
-});
+};
 
 export default Board;

@@ -1,24 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Cell.css';
 
-class Cell extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			curCoord: this.props.coord,
-		};
-	}
-
-	render() {
-		return (
-			<td
-				className='Cell Cell-lit'
-				onClick={() => this.props.onClick(this.state.curCoord)}
-			>
-				{this.props.word}
-			</td>
-		);
-	}
-}
+const Cell = React.memo((props) => {
+	console.log('cell');
+	return (
+		<td
+			className='Cell Cell-lit'
+			onClick={() => props.onClick(props.coord)}
+		>
+			{props.word}
+		</td>
+	);
+});
 
 export default Cell;

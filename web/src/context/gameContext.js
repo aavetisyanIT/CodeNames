@@ -1,9 +1,12 @@
 import React, { createContext, useState, useMemo } from 'react';
 import { pendingBoard } from '../constants';
 
+console.log('GameContext');
+
 export const GameContext = createContext();
 
 export function GameStateProvider(props) {
+	console.log('GameStateProvider');
 	const [name, setName] = useState('');
 	const [teamId, setTeamId] = useState('');
 	const [playerId, setPlayerId] = useState('');
