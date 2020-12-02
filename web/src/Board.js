@@ -11,16 +11,12 @@ const Board = () => {
 	const { playerId } = useContext(GameContext);
 	const { teamId } = useContext(GameContext);
 
-	const boardRequest = () => {
+	useEffect(() => {
 		socket.emit('boardRequest', playerId);
 		socket.on('updatedBoard', (data) => {
 			setBoard(data);
 		});
-	};
-
-	useEffect(() => {
-		boardRequest();
-	}, []);
+	}, [playerId, setBoard]);
 
 	const handleClick = (newCoord) => {
 		let data = { coord: newCoord, playerId: playerId };
