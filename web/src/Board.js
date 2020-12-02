@@ -24,8 +24,8 @@ const Board = () => {
 		socket.on('testMsg', (data) => {
 			setBoard(data);
 		});
-		socket.on('playersUpdate', (data) => {
-			console.log(data);
+		socket.on('playersUpdate', (info) => {
+			console.log(info);
 		});
 	};
 

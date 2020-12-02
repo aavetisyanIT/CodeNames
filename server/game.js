@@ -35,10 +35,10 @@ class Game {
 		if (player !== null) {
 			if (this.teamA.id === teamId) {
 				this.teamA.addPlayer(player);
-				//this.notifyTeamAPlayersUpdate();
+				this.notifyTeamAPlayersUpdate();
 			} else if (this.teamB.id === teamId) {
 				this.teamB.addPlayer(player);
-				//this.notifyTeamBPlayersUpdate();
+				this.notifyTeamBPlayersUpdate();
 			}
 		}
 	}
@@ -51,6 +51,7 @@ class Game {
 	}
 
 	notifyTeamBPlayersUpdate() {
+		console.log('in notifyA function');
 		let players = this.teamBPlayers();
 		players.forEach((player) => {
 			let socket = this.sockets.get(player.id);

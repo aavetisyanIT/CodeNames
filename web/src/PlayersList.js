@@ -5,8 +5,6 @@ import { GameContext } from './context/gameContext';
 //const socket = io.connect('http://localhost:4000');
 
 const PlayersList = () => {
-	console.log('PlayersList');
-
 	const { players } = useContext(GameContext);
 	const { teamId } = useContext(GameContext);
 

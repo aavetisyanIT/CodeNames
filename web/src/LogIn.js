@@ -7,8 +7,6 @@ import PlayersList from './PlayersList';
 const socket = io.connect('http://localhost:4000');
 
 const LogIn = () => {
-	console.log('LogIn');
-
 	const { name, setName } = useContext(GameContext);
 	const { teamId, setTeamId } = useContext(GameContext);
 	const { setPlayerId } = useContext(GameContext);
@@ -16,6 +14,10 @@ const LogIn = () => {
 	const { joinButtonDisabled, setJoinButtonDisabled } = useContext(
 		GameContext,
 	);
+	socket.on('playersUpdate', (info) => {
+		debugger;
+		console.log(info);
+	});
 
 	//setting state with input values
 	const handleNameChange = (e) => {
