@@ -14,10 +14,6 @@ const LogIn = () => {
 	const { joinButtonDisabled, setJoinButtonDisabled } = useContext(
 		GameContext,
 	);
-	socket.on('playersUpdate', (info) => {
-		debugger;
-		console.log(info);
-	});
 
 	//setting state with input values
 	const handleNameChange = (e) => {

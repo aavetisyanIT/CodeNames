@@ -51,7 +51,6 @@ class Game {
 	}
 
 	notifyTeamBPlayersUpdate() {
-		console.log('in notifyA function');
 		let players = this.teamBPlayers();
 		players.forEach((player) => {
 			let socket = this.sockets.get(player.id);

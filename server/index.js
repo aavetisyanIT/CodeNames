@@ -58,6 +58,4 @@ io.sockets.on('connection', (socket) => {
 		let updatedBoard = checkCell(data.coord.y, data.coord.x);
 		io.emit('updatedBoard', updatedBoard);
 	});
-
-	game.notifyTeamAPlayersUpdate();
 });

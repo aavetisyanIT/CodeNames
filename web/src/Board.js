@@ -7,25 +7,26 @@ import { GameContext } from './context/gameContext';
 const socket = io.connect('http://localhost:4000');
 
 const Board = () => {
+	console.log('Board');
 	const { board, setBoard } = useContext(GameContext);
 	const { playerId } = useContext(GameContext);
 	const { teamId } = useContext(GameContext);
 
 	useEffect(() => {
 		socket.emit('boardRequest', playerId);
+	}, [playerId]);
+
+	useEffect(() => {
 		socket.on('updatedBoard', (data) => {
 			setBoard(data);
 		});
-	}, [playerId, setBoard]);
+	}, [setBoard]);
 
 	const handleClick = (newCoord) => {
 		let data = { coord: newCoord, playerId: playerId };
 		socket.emit('clickRequest', data);
 		socket.on('testMsg', (data) => {
 			setBoard(data);
-		});
-		socket.on('playersUpdate', (info) => {
-			console.log(info);
 		});
 	};
 
